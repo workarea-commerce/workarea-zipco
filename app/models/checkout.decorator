@@ -1,0 +1,33 @@
+module Workarea
+  decorate Checkout, with: :zipco do
+    # handles checking out a zipco refered order
+    # inventory is captured but no funds are captured.
+    #
+    # @return [Boolean]
+    #
+    def handle_zipco_referred
+      return false unless complete?
+      return false unless shippable?
+      return false unless payable?
+
+      inventory.purchase
+      return false unless inventory.captured?
+
+      true
+    end
+
+    # handles checking out a zipco order that was referred but
+    # is now approved. Funds are captured and checkout side
+    # effects are ran.
+    #
+    # @return [Boolean]
+    #
+    def handle_zipco_approved_referred
+      payment_collection.purchase
+      result = order.place
+      place_order_side_effects if result
+
+      result
+    end
+  end
+end

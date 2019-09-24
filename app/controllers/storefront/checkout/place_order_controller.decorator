@@ -1,0 +1,11 @@
+module Workarea
+  decorate Storefront::Checkout::PlaceOrderController, with: 'zipco' do
+    def place_order
+      if params[:payment] == 'zipco' && !current_checkout.payment.zipco?
+        redirect_to start_zipco_path and return
+      else
+        super
+      end
+    end
+  end
+end

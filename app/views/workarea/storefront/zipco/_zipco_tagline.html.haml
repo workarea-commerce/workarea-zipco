@@ -1,0 +1,4 @@
+- if Workarea::Zipco.config.marketing_assets_key.present? && Workarea::Zipco.config.show_tagline
+  %script{:src => "https://static.zipmoney.com.au/lib/js/zm-widget-js/dist/zip-widget.min.js", :type => "text/javascript"}
+  %div{ data: {env: "#{Workarea::Zipco.config.marketing_assets_env}", "zm-merchant": "#{Workarea::Zipco.config.marketing_assets_key}" }}
+  #zip-product-widg{data: {"zm-asset": "productwidget", "zm-popup-asset": "termsdialog", "zm-widget": "popup" }, style: "cursor:pointer"}

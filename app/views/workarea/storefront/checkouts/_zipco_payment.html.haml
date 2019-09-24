@@ -1,0 +1,10 @@
+- content_for :head do
+  = javascript_include_tag 'https://static.zipmoney.com.au/checkout/checkout-v1.min.js'
+
+- if @step.zipco.show?
+  .checkout-payment__primary-method.checkout-payment__primary-method--zipco{ class: ('checkout-payment__primary-method--selected' if @step.zipco?) }
+    .button-property
+      = radio_button_tag 'payment', 'zipco', step.zipco?, data: { zipco_payment_method: '' }
+      = label_tag 'payment[zipco]', nil, class: 'button-property__name' do
+        = image_tag('https://static.zipmoney.com.au/assets/default/footer-tile/footer-tile-new.png', class: "zipco-icon")
+      %p.button-property__text= t('workarea.storefront.zipco.on_continue')

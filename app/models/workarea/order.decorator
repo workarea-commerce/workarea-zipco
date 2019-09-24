@@ -1,0 +1,52 @@
+module Workarea
+  decorate Order, with: :zipco do
+    decorated do
+      field :zipco_order_id, type: String
+      field :zipco_referred_at, type: Time
+      scope :not_referred, -> { where(:zipco_referred_at => nil) }
+
+
+      index({ zipco_order_id: 1}, { background: true })
+      index({ zipco_referred_at: 1}, { background: true })
+    end
+
+    class_methods do
+      # Overriding method from core/models/order/queries.rb module
+      def need_reminding
+        super.where(zipco_referred_at: nil)
+      end
+
+      def find_current(params = {})
+        if params[:id].present?
+          Order.not_placed.not_referred.find(params[:id].to_s)
+        elsif params[:user_id].present?
+          Order.recently_updated.not_placed.not_referred.find_by(params.slice(:user_id))
+        else
+          Order.new(user_id: params[:user_id])
+        end
+      rescue Mongoid::Errors::DocumentNotFound
+        Order.new(user_id: params[:user_id])
+      end
+    end
+
+    def clear_zipco!
+      self.zipco_order_id = nil
+      self.zipco_referred_at = nil
+      save!
+    end
+
+    def zipco_referred?
+      !!zipco_referred_at
+    end
+
+    def set_zipco_referred_at!
+      update!(
+        zipco_referred_at: Time.current
+      )
+    end
+
+    def abandoned?
+      super && !zipco_referred?
+    end
+  end
+end
