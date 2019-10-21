@@ -1,0 +1,11 @@
+module Workarea
+  decorate Storefront::OrderViewModel, with: :kount do
+    def placed_at
+      if model.zipco_referred?
+        Time.current
+      else
+        model.placed_at
+      end
+    end
+  end
+end

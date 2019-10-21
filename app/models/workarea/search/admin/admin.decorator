@@ -1,0 +1,7 @@
+module Workarea
+  decorate Search::Admin::Order, with: :zipco do
+    def should_be_indexed?
+      model.placed? || model.zipco_referred?
+    end
+  end
+end

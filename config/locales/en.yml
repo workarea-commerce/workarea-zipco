@@ -1,0 +1,38 @@
+---
+en:
+  workarea:
+    admin:
+      orders:
+        tenders:
+          zip:
+            title: Zip Payments
+    storefront:
+      orders:
+        referred_message: Your order is pending approval of your zipMoney application. You will receive an email with instructions shortly on whether your application has been approved or not. If approved you will be able to complete your purchase by following a link in the email.
+        tenders:
+          zipco: Zip Payments
+      carts:
+        zip: Zip Payments
+      checkouts:
+        zip: Zip Payments
+      zipco:
+        cancelled_message: Your Zip payment has been cancelled. Please select another payment method.
+        declined_message: Your Zip payment has been declined.
+        check_out: Check Out with Zip
+        checkout_submit_text: Continue to Zip
+        on_continue: When you click Place Order you will be directed to ZIP to complete payment. When using ZIP all promo codes must be applied before moving to the next step.
+        payment_error: There was a problem processing your Zip payment, you have not been charged. Please try again or select
+          another payment method.
+        zip: Zip
+        learn_more: Learn More
+    zipco:
+      authorize: "%{amount} has been authorized"
+      capture: "%{amount} has been captured"
+      purchase: "%{amount} has been purchased"
+      refund: "%{amount} has been refunded"
+      refund: "Zip Payment Transaction has been refunded"
+      authorize_failure: "Zip authorize has failed"
+      capture_failure: "Zip capture has failed"
+      purchase_failure: "Zip purchase has failed"
+      refund_failure: "Zip refund has failed"
+      tender_description: "Zip Payment"

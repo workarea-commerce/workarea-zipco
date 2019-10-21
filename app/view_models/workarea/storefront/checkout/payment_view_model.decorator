@@ -1,0 +1,17 @@
+module Workarea
+  decorate Storefront::Checkout::PaymentViewModel, with: :zipco do
+    decorated do
+      delegate :zipco?, to: :payment
+    end
+
+    def using_new_card?
+      super && !zipco?
+    end
+
+    def zipco
+      order = Workarea::Order.find(payment.id)
+      Storefront::ZipcoViewModel.new(nil, order: order)
+    end
+  end
+end
+

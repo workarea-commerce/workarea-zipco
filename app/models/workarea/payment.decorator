@@ -1,0 +1,30 @@
+module Workarea
+  decorate Payment, with: :zipco do
+    decorated do
+      embeds_one :zipco, class_name: 'Workarea::Payment::Tender::Zipco'
+    end
+
+    def zipco?
+      zipco.present?
+    end
+
+    def set_zipco(attrs)
+      build_zipco unless zipco?
+      zipco.attributes = attrs.slice(
+        :token
+      )
+
+      save
+    end
+
+    def clear_zipco!
+      self.zipco = nil
+      save!
+    end
+
+    def set_credit_card(*)
+      self.zipco = nil
+      super
+    end
+  end
+end
