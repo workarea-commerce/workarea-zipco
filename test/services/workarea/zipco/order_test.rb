@@ -9,9 +9,9 @@ module Workarea
         payment = Workarea::Payment.find(order.id)
 
         payment = Workarea::Payment.find(order.id)
-        payment.profile.update_attributes!(store_credit: 1.00)
+        payment.profile.update_attributes!(store_credit: 2.00)
         payment.set_store_credit
-        payment.tenders.first.amount = 1.to_m
+        payment.tenders.first.amount = 2.to_m
         payment.save
 
         order.reload
@@ -19,12 +19,16 @@ module Workarea
 
         order_hash = Workarea::Zipco::Order.new(order).to_h
         items = order_hash[:order][:items]
-        assert_equal(4, items.size)
+        assert_equal(5, items.size)
 
-        assert_equal(10.00, order_hash[:order][:amount].to_f)
+        assert_equal(8.00, order_hash[:order][:amount].to_f)
 
-        discount_item = items.detect { |i| i[:type] == "discount" }
-        assert_equal(-1.00, discount_item[:amount])
+        discount_items = items.select { |i| i[:type] == "discount" }
+
+        assert_equal(2, discount_items.size)
+        discount_prices = discount_items.map { |d| d[:amount] }
+        assert(discount_prices.include? -1.0) # order total discount
+        assert(discount_prices.include? -2.0) # store credit
 
         zipco_order = order_hash[:order]
         assert_equal(order.id, zipco_order[:reference])

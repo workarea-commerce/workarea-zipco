@@ -55,7 +55,7 @@ module Workarea
         def zipco_order
           {
             reference: order.id,
-            amount: order.total_price.to_f,
+            amount: order.order_balance.to_f,
             currency: currency_code,
             shipping: zip_shipping,
             items: items
@@ -124,7 +124,7 @@ module Workarea
             reference: "#{order.id}-shipping",
           }
 
-          items_array + discount_items
+          items_array + discount_items + advanced_payment_discount_item
         end
 
         def discount_items
@@ -139,6 +139,20 @@ module Workarea
               type: "discount"
             }
           end
+        end
+
+        def advanced_payment_discount_item
+          return [] if order.order_balance == order.total_price
+          balance = order.total_price - order.order_balance
+
+          [
+            {
+              name: "Other payment tenders",
+              amount: (balance * -1).to_f,
+              quantity: 1,
+              type: "discount"
+            }
+          ]
         end
 
         def zipco_config
