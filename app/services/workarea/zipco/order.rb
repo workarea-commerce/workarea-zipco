@@ -101,7 +101,6 @@ module Workarea
               quantity: oi.quantity,
               type: "sku",
               reference: oi.id,
-              #image_uri: ProductImageUrl.product_image_url(oi.image, :detail),
               item_uri: ProductUrl.product_url(id: oi.product.to_param, host: Workarea.config.host)
             }
           end
@@ -123,6 +122,10 @@ module Workarea
             type: "shipping",
             reference: "#{order.id}-shipping",
           }
+
+          if gift_wrap_item.present?
+            items_array << gift_wrap_item
+          end
 
           items_array + discount_items + advanced_payment_discount_item
         end
@@ -163,6 +166,18 @@ module Workarea
 
         def confirm_url
           Storefront::Engine.routes.url_helpers.complete_zipco_url(host: Workarea.config.host)
+        end
+
+        def gift_wrap_item
+          adjustment = order.price_adjustments.detect { |pa| pa.description == 'Gift Wrapping' }
+          return unless adjustment.present?
+
+          {
+            name: "Gift Wrapping",
+            amount: adjustment.amount.to_f,
+            quantity: 1,
+            type: "sku"
+          }
         end
     end
   end
