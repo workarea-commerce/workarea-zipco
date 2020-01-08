@@ -37,6 +37,22 @@ module Workarea
         zipco_shipping = zipco_order[:shipping]
         assert(zipco_shipping.present?)
         assert(zipco_shipping[:address].present?)
+
+        item = order.items.first
+        item.adjust_pricing(
+          price: 'item',
+          quantity: 1,
+          description: "Gift Wrapping",
+          calculator: "Workarea::Pricing::Calculators::GiftWrappingCalculator",
+          amount: 5.to_m,
+          data: {}
+          )
+
+        order_hash = Workarea::Zipco::Order.new(order).to_h
+
+        gift_wrap_item = order_hash[:order][:items].detect { |i| i[:name] == "Gift Wrapping" }
+        assert(gift_wrap_item.present?)
+        assert_equal(5.0, gift_wrap_item[:amount])
       end
 
       private
