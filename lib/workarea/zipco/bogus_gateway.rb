@@ -5,15 +5,19 @@ module Workarea
         Response.new(response(create_order_body))
       end
 
-      def capture(attrs)
+      def capture(attrs, request_id = nil)
         Response.new(response(capture_body))
       end
 
-      def authorize(attrs)
-        Response.new(response(capture_body))
+      def authorize(attrs, request_id = nil)
+        if attrs[:authority][:value] == "timeout_token"
+          Response.new(response(nil, 502))
+        else
+          Response.new(response(capture_body))
+        end
       end
 
-      def purchase(attrs)
+      def purchase(attrs, request_id = nil)
         Response.new(response(capture_body))
       end
 

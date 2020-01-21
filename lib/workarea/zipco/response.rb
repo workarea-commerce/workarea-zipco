@@ -20,6 +20,10 @@ module Workarea
       def body
         @body ||= JSON.parse(@response.body)
       end
+
+      def status
+        @response.status
+      end
     end
   end
 end

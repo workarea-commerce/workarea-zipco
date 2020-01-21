@@ -4,8 +4,8 @@ Workarea.configure do |config|
 
   config.zipco = ActiveSupport::Configurable::Configuration.new
   config.zipco.api_version = "2017-03-01"
-  config.zipco.api_timeout = 10
-  config.zipco.open_timeout = 10
+  config.zipco.api_timeout = 15
+  config.zipco.open_timeout = 15
 
   config.zipco.marketing_assets_key = nil
   config.zipco.marketing_assets_env = Rails.env.production? ? "production" : "sandbox"

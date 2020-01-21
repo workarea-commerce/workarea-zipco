@@ -17,17 +17,18 @@ module Workarea
         Zipco::Response.new(response)
       end
 
-      def authorize(attrs)
+      def authorize(attrs, request_key = nil)
         response = connection.post do |req|
           req.url "merchant/v1/charges"
           req.body = attrs.to_json
+          req.headers["Idempotency-Key"] = request_key
         end
 
         Zipco::Response.new(response)
       end
       alias :purchase :authorize
 
-      def capture(charge_id, amount)
+      def capture(charge_id, amount, request_key = nil)
         body = {
           amount: amount.to_f
         }
@@ -35,12 +36,13 @@ module Workarea
         response = connection.post do |req|
           req.url "merchant/v1/charges/#{charge_id}/capture"
           req.body = body.to_json
+          req.headers["Idempotency-Key"] = request_key
         end
 
         Zipco::Response.new(response)
       end
 
-      def refund(charge_id, amount)
+      def refund(charge_id, amount, request_key = nil)
         reason = "Web Refund"
         body = {
           charge_id: charge_id,
@@ -51,6 +53,7 @@ module Workarea
         response = connection.post do |req|
           req.url "merchant/v1/refunds"
           req.body = body.to_json
+          req.headers["Idempotency-Key"] = request_key
         end
         Zipco::Response.new(response)
       end

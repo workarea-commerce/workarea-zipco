@@ -95,12 +95,16 @@ module Workarea
         def items
           items_array = order.items.map do |oi|
 
+            url = ProductImageUrl.product_image_url(oi.image, :detail)
+            item_image = url.starts_with?("/") ? nil : url
+
             {
               name: oi.product.name,
               amount: oi.original_unit_price.to_f,
               quantity: oi.quantity,
               type: "sku",
               reference: oi.id,
+              image_uri: item_image,
               item_uri: ProductUrl.product_url(id: oi.product.to_param, host: Workarea.config.host)
             }
           end
