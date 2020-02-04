@@ -14,7 +14,7 @@ require "faraday"
 
 module Workarea
   module Zipco
-    ALLOWED_COUNTRIES = ["AU", "NZ"]
+    RETRY_ERROR_STATUSES = 500..599
 
     def self.credentials
       (Rails.application.secrets.zipco || {}).deep_symbolize_keys

@@ -6,7 +6,7 @@ module Workarea
         include CreditCardOperation
 
         def complete!
-          response = gateway.capture(charge_id, transaction.amount)
+          response = capture
           if response.success?
             transaction.response = ActiveMerchant::Billing::Response.new(
               true,
@@ -20,7 +20,7 @@ module Workarea
              transaction.response = ActiveMerchant::Billing::Response.new(
                false,
               I18n.t('workarea.zipco.capture_failure'),
-              response.body
+              response.body.present? ? response.body : {}
             )
           end
         end
@@ -37,6 +37,20 @@ module Workarea
 
           def gateway
             Workarea::Zipco.gateway
+          end
+
+          def refund
+            request_id = SecureRandom.uuid
+            capture_response = response(request_id)
+            if Workarea::Zipco::RETRY_ERROR_STATUSES.include? capture_response.status
+              return response(request_id)
+            end
+
+            capture_response
+          end
+
+          def response(request_id)
+            gateway.capture(charge_id, transaction.amount, request_id)
           end
       end
     end
