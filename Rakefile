@@ -42,6 +42,7 @@ task :release do
   system 'git push origin HEAD --follow-tags'
 
   system "gem build workarea-zipco.gemspec"
+  system "gem push workarea-zipco-#{Workarea::Zipco::VERSION}.gem"
   system "gem push workarea-zipco-#{Workarea::Zipco::VERSION}.gem --host #{host}"
   system "rm workarea-zipco-#{Workarea::Zipco::VERSION}.gem"
 end
