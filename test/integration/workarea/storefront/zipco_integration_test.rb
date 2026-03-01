@@ -95,7 +95,7 @@ module Workarea
       def test_cancel_removes_zipco
         payment = Payment.find(order.id)
 
-        order.update_attributes(zipco_order_id: '1234')
+        order.update(zipco_order_id: '1234')
 
         payment.set_zipco(token: '1234')
 
@@ -112,7 +112,7 @@ module Workarea
       def test_decline_removes_zipco
         payment = Payment.find(order.id)
 
-        order.update_attributes(zipco_order_id: '1234')
+        order.update(zipco_order_id: '1234')
 
         payment.set_zipco(token: '1234')
 
