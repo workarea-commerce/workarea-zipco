@@ -20,7 +20,7 @@ module Workarea
 
         payment.set_zipco(token: create_order_response.zipco_order_id)
 
-        order.update_attributes!(zipco_order_id: create_order_response.zipco_order_id)
+        order.update!(zipco_order_id: create_order_response.zipco_order_id)
       end
 
       def redirect_uri

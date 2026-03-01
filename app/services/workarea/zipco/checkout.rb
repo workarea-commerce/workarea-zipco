@@ -17,7 +17,7 @@ module Workarea
         if result == "referred"
           order.set_zipco_referred_at!
         else
-          order.update_attributes(zipco_referred_at: nil)
+          order.update(zipco_referred_at: nil)
         end
 
         order.user_id = user.try(:id)
